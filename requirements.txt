@@ -1,0 +1,2 @@
+matplotlib==3.5.0
+ortools==9.1.9490
