@@ -10,6 +10,8 @@ from typing import List
 from graphlib import TopologicalSorter
 from dataclasses import dataclass
 from functools import partial
+import json
+import sys
 
 @dataclass
 class Project:
@@ -29,59 +31,16 @@ class Dependency:
 
 
 
-def main_projects():
+def main_projects(args: List[str]):
+    print(args)
+    inpput_json_file = args[1]
+    output_png_file = args[2]
+
     # Input
     projects = {}
-    projects_json = {
-        'max_resources_in_parallel': 3,
-        'projects': {
-            'take-out-the-trash': {
-                'name': 'Take out the trash',
-                'num_resources': 2,
-                'time_in_weeks': 2,
-                'dependencies': [{
-                    'project_id': 'clean-the-sink',
-                    'lag_time': 1,
-                }]
-            },
-            'do-the-dishes': {
-                'name': 'Do the dishes',
-                'num_resources': 1,
-                'time_in_weeks': 1,
-                'dependencies': [{
-                    'project_id': 'clear-the-table',
-                    'lag_time': 0,
-                }]
-            },
-            'clean-the-sink': {
-                'name': 'Clean the sink',
-                'num_resources': 1,
-                'time_in_weeks': 2,
-                'dependencies': [{
-                    'project_id': 'do-the-dishes',
-                    'lag_time': -1,
-                }]
-            },
-            'sweep-the-floor': {
-                'name': 'Sweep the floor',
-                'num_resources': 2,
-                'time_in_weeks': 1,
-                'dependencies': []
-            },
-            'clear-the-table': {
-                'name': 'Clear the table',
-                'num_resources': 1,
-                'time_in_weeks': 3,
-                'dependencies': []
-            },
-            'vaccum-carpet': {
-                'name': 'Vaccum Carpet',
-                'num_resources': 1,
-                'time_in_weeks': 5,
-                'dependencies': []
-            },
-        },
-    }
+    projects_json = {}
+    with open(inpput_json_file, encoding = 'utf-8') as f:
+        projects_json = json.loads(f.read())
 
     # build dependency graph and sort topologically, just a trick so we can have dependency reference project instance
     # not completely necessary we could have used a map just didn't realize till now python3 has this graphlib
@@ -182,8 +141,8 @@ def main_projects():
         # plt.legend(handles=labels, loc=4)
         # Show or save the plot
         #plt.show()
-        plt.savefig("schedule-gantt-projects.png")
+        plt.savefig(output_png_file)
 
 
 # Tell python to run main method
-if __name__ == '__main__': main_projects()
+if __name__ == '__main__': main_projects(sys.argv)
