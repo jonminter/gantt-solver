@@ -134,7 +134,7 @@ INPUT_SCHEMA = {
 
 def save_solution_json(project_scheduling_solution: ProjectSchedulingSolution, output_file: str):
     with open(output_file, mode="w") as f:
-        f.write(jsons.dumps(project_scheduling_solution, indent=True))
+        f.write(jsons.dumps(project_scheduling_solution, jdkwargs={"indent": 2}))
 
 
 def create_gantt_chart(project_scheduling_solution: ProjectSchedulingSolution, output_file: str):
