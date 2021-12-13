@@ -15,6 +15,8 @@ import sys
 import argparse
 import jsonschema
 import heapq
+import random
+from colorsys import hls_to_rgb
 
 
 @dataclass
@@ -136,7 +138,6 @@ def save_solution_json(project_scheduling_solution: ProjectSchedulingSolution, o
     with open(output_file, mode="w") as f:
         f.write(jsons.dumps(project_scheduling_solution, jdkwargs={"indent": 2}))
 
-
 def create_gantt_chart(project_scheduling_solution: ProjectSchedulingSolution, output_file: str):
     bars = []
 
@@ -159,19 +160,12 @@ def create_gantt_chart(project_scheduling_solution: ProjectSchedulingSolution, o
     gnt.set_yticks([12 + i * 10 for i in range(len(bars))])
     gnt.set_yticklabels([bar[0] for bar in bars])
     gnt.grid(True)
-    allcolors = [
-        'tab:orange',
-        'tab:green',
-        'tab:red',
-        'tab:purple',
-        'tab:blue',
-        'tab:pink',
-        'tab:black'
-    ]
+    
     # Loop bars
     for i in range(len(bars)):
+        bar_color = 'tab:green'
         gnt.broken_barh([bars[i][2]], (10 + i * 10, 4),
-                        facecolors=(allcolors[i % len(allcolors)], 'tab:grey'))
+                        facecolors=(bar_color))
         j = 0
         for x1, x2 in [bars[i][2]]:
             gnt.text(x=x1 + x2/2, y=12 + i * 10,
