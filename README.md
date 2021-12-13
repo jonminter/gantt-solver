@@ -9,3 +9,4 @@ pip3 install -r requirements.txt
 python3 gantt_solver/create_gantt_chart.py example-input.json example-output.png
 open example-output.solution0.png
 ```
+![Example Gantt Chart](./examples/example-out.solution0.png)
