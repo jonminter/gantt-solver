@@ -179,11 +179,14 @@ def main():
     arg_parser.add_argument("output_file", help="Prefix for solution JSON files and Gantt chart PNGs")
     arg_parser.add_argument("--timeout", default=30, type=int, help="Maximum time (in seconds) to allow gantt solver to run")
     arg_parser.add_argument("--max-solutions", default=5, type=int, help="Maximum number of solutions to find before stopping")
+    arg_parser.add_argument("--max-duration", default=0, type=int,
+        help = "Constraint for maximum total duration of projects.For a solution to be valid total duration must be less than or equal to this number.")
     args = arg_parser.parse_args()
     inpput_json_file = args.input_file
     output_file = args.output_file
     maximum_time_to_run = args.timeout
     maximum_num_solutions = args.max_solutions
+    maximum_duration = args.max_duration
 
     # Input
     projects = {}
@@ -250,13 +253,18 @@ def main():
         [project.num_resources for project in projects.values()],
         max_resources_at_a_time)
 
+    # If a max duration was set then add a constraint for max duration
+    total_duration = model.NewIntVar(0, horizon, 'total_duration')
+    model.AddMaxEquality(total_duration, [project.end for project in projects.values()])
+
+    if maximum_duration > 0:
+        model.Add(total_duration <= maximum_duration)
+
     # OBJECTIVE
     # We want to find solutions that minimize total_duration of all projects
     # We can find total_duration by taking the max project end time and add a minimizing
     # objective to our model. This will rate solutions with a shorter 
     # total duration as better solutions
-    total_duration = model.NewIntVar(0, horizon, 'total_duration')
-    model.AddMaxEquality(total_duration, [project.end for project in projects.values()])
     model.Minimize(total_duration)
 
     # FIND A SOLUTION
