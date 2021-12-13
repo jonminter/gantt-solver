@@ -4,7 +4,7 @@
     "take-out-the-trash": {
       "name": "Take out the trash",
       "num_resources": 2,
-      "time_in_weeks": 2,
+      "duration": 2,
       "dependencies": [
         {
           "project_id": "clean-the-sink",
@@ -15,7 +15,7 @@
     "do-the-dishes": {
       "name": "Do the dishes",
       "num_resources": 1,
-      "time_in_weeks": 1,
+      "duration": 1,
       "dependencies": [
         {
           "project_id": "clear-the-table",
@@ -26,30 +26,30 @@
     "clean-the-sink": {
       "name": "Clean the sink",
       "num_resources": 1,
-      "time_in_weeks": 2,
+      "duration": 2,
       "dependencies": [
         {
           "project_id": "do-the-dishes",
-          "lag_time": -1
+          "lag_time": 0
         }
       ]
     },
     "sweep-the-floor": {
       "name": "Sweep the floor",
       "num_resources": 2,
-      "time_in_weeks": 1,
+      "duration": 1,
       "dependencies": []
     },
     "clear-the-table": {
       "name": "Clear the table",
       "num_resources": 1,
-      "time_in_weeks": 3,
+      "duration": 3,
       "dependencies": []
     },
     "vaccum-carpet": {
       "name": "Vaccum Carpet",
       "num_resources": 1,
-      "time_in_weeks": 5,
+      "duration": 5,
       "dependencies": []
     }
   }
